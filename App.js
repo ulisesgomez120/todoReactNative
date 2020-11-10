@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
 import {
   FlatList,
@@ -10,7 +9,8 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import TodoList from "./components/TodoList";
 import { tempData } from "./tempData";
-import CreateListModal from "./components/CreateListModal";
+import StyledModal from "./components/StyledModal";
+import CreateList from "./components/CreateList";
 
 export default function App() {
   const [showModal, setShowModal] = React.useState(false);
@@ -20,7 +20,9 @@ export default function App() {
   }
   return (
     <View style={styles.container}>
-      <CreateListModal show={showModal} toggle={toggleModal} />
+      <StyledModal show={showModal} toggle={toggleModal}>
+        <CreateList toggle={toggleModal} />
+      </StyledModal>
       <View style={{ flexDirection: "row" }}>
         <View style={styles.divider} />
         <Text style={styles.heading}>

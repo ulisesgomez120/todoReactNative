@@ -1,16 +1,15 @@
 import React from "react";
 import {
-  Modal,
   TouchableOpacity,
   StyleSheet,
   View,
   Text,
   TextInput,
 } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+
 import { tempData } from "../tempData";
 
-export default function CreateListModal({ show, toggle }) {
+export default function CreateListModal({ toggle }) {
   const colors = [
     "#24A6D9",
     "goldenrod",
@@ -44,44 +43,31 @@ export default function CreateListModal({ show, toggle }) {
     );
   });
   return (
-    <Modal animationType='slide' visible={show} onRequestClose={toggle}>
-      <TouchableOpacity onPress={toggle} style={styles.closeBtn}>
-        <AntDesign name='close' size={26} color='gray' />
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        paddingHorizontal: 35,
+      }}>
+      <Text style={{ fontSize: 27, fontWeight: "bold" }}>Create Todo List</Text>
+      <TextInput
+        style={styles.textInput}
+        placeholder='List Name'
+        value={inputVal}
+        onChangeText={(text) => setInputVal(text)}
+      />
+      <View style={styles.colorContainer}>{colorList}</View>
+      <TouchableOpacity
+        style={[styles.createBtn, { backgroundColor: currentColor }]}
+        onPress={createTodoList}>
+        <Text style={{ color: "white", fontWeight: "600" }}>Create!</Text>
       </TouchableOpacity>
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          paddingHorizontal: 35,
-        }}>
-        <Text style={{ fontSize: 27, fontWeight: "bold" }}>
-          Create Todo List
-        </Text>
-        <TextInput
-          style={styles.textInput}
-          placeholder='List Name'
-          value={inputVal}
-          onChangeText={(text) => setInputVal(text)}
-        />
-        <View style={styles.colorContainer}>{colorList}</View>
-        <TouchableOpacity
-          style={[styles.createBtn, { backgroundColor: currentColor }]}
-          onPress={createTodoList}>
-          <Text style={{ color: "white", fontWeight: "600" }}>Create!</Text>
-        </TouchableOpacity>
-      </View>
-    </Modal>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  closeBtn: {
-    position: "absolute",
-    top: 0,
-    right: 0,
-    margin: 16,
-  },
   textInput: {
     borderColor: "goldenrod",
     borderWidth: 1,

@@ -1,11 +1,18 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TouchableHighlight,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function TodoList({ list }) {
   const complete = list.todos.filter(({ completed }) => completed).length;
   const unfinished = list.todos.length - complete;
   return (
-    <View style={[styles.listContainer, { backgroundColor: list.color }]}>
+    <TouchableOpacity
+      style={[styles.listContainer, { backgroundColor: list.color }]}>
       <Text style={styles.title}>{list.name}</Text>
       <View style={styles.center}>
         <Text style={styles.showNum}>{complete}</Text>
@@ -15,7 +22,7 @@ export default function TodoList({ list }) {
         <Text style={styles.showNum}>{unfinished}</Text>
         <Text>Unfinished</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
