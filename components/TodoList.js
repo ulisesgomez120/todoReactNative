@@ -17,7 +17,7 @@ function ShowTodos({ list: { name, color, todos }, complete }) {
           {complete} of {todos.length} tasks
         </Text>
       </View>
-      <View style={{ flex: 5 }}>
+      <View style={{ flex: 3 }}>
         <FlatList
           data={todos}
           keyExtractor={(item) => item.title}
