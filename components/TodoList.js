@@ -5,12 +5,14 @@ import {
   Text,
   TouchableOpacity,
   View,
+  SafeAreaView,
+  TextInput,
 } from "react-native";
 import StyledModal from "./StyledModal";
 
 function ShowTodos({ list: { name, color, todos }, complete }) {
   return (
-    <View style={styles.showTodosContainer}>
+    <SafeAreaView style={styles.showTodosContainer}>
       <View style={[styles.showTododsHeader, { borderBottomColor: color }]}>
         <Text style={styles.showTodosTitle}>{name}</Text>
         <Text style={{ color: "gray" }}>
@@ -24,7 +26,11 @@ function ShowTodos({ list: { name, color, todos }, complete }) {
           renderItem={({ item }) => <Text>{item.title} </Text>}
         />
       </View>
-    </View>
+      <View style={styles.todosFooter}>
+        <TextInput placeholder='Add Todo' />
+        <TouchableOpacity>Create!</TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -68,6 +74,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
     width: 200,
     alignItems: "center",
+    justifyContent: "space-between",
   },
   title: {
     color: "white",
@@ -95,5 +102,12 @@ const styles = StyleSheet.create({
     marginLeft: 45,
     borderBottomWidth: 5,
     paddingVertical: 12,
+  },
+  todosFooter: {
+    alignSelf: "stretch",
+    flex: 0.5,
+    backgroundColor: "blue",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

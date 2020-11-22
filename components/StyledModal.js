@@ -1,12 +1,19 @@
 import React from "react";
-import { Modal, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  Modal,
+  TouchableOpacity,
+  StyleSheet,
+  SafeAreaView,
+} from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
 export default function StyledModal({ show, toggle, children }) {
   return (
     <Modal animationType='slide' visible={show} onRequestClose={toggle}>
       <TouchableOpacity onPress={toggle} style={styles.closeBtn}>
-        <AntDesign name='close' size={26} color='gray' />
+        <SafeAreaView>
+          <AntDesign name='close' size={26} color='gray' />
+        </SafeAreaView>
       </TouchableOpacity>
       {children}
     </Modal>
