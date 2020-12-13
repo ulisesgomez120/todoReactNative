@@ -7,14 +7,34 @@ import {
   View,
   SafeAreaView,
   TextInput,
+  KeyboardAvoidingView,
 } from "react-native";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 import StyledModal from "./StyledModal";
 
-function ShowTodos({ list: { name, color, todos }, complete }) {
+function ShowTodos({
+  list: { name, color, todos },
+  complete,
+  updateCompleted,
+}) {
+  const [todo, setTodo] = React.useState("");
+
+  function todoHandler(text) {
+    setTodo(text);
+  }
+  function addTodo() {
+    const formatTodo = { title: todo, completed: false };
+    todos.push(formatTodo);
+    setTodo("");
+  }
+  function toggleTodoCompleted(todo) {
+    todo.completed = !todo.completed;
+    updateCompleted();
+  }
   return (
-    <SafeAreaView style={styles.showTodosContainer}>
-      <View style={[styles.showTododsHeader, { borderBottomColor: color }]}>
-        <Text style={styles.showTodosTitle}>{name}</Text>
+    <SafeAreaView style={styles.todosContainer}>
+      <View style={[styles.tododsHeader, { borderBottomColor: color }]}>
+        <Text style={styles.todosTitle}>{name}</Text>
         <Text style={{ color: "gray" }}>
           {complete} of {todos.length} tasks
         </Text>
@@ -23,31 +43,77 @@ function ShowTodos({ list: { name, color, todos }, complete }) {
         <FlatList
           data={todos}
           keyExtractor={(item) => item.title}
-          renderItem={({ item }) => <Text>{item.title} </Text>}
+          renderItem={({ item }) => (
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginTop: 13,
+              }}>
+              <TouchableOpacity onPress={() => toggleTodoCompleted(item)}>
+                <Ionicons
+                  name={item.completed ? "ios-square" : "ios-square-outline"}
+                  size={24}
+                  color='gray'
+                  style={{ width: 32 }}
+                />
+              </TouchableOpacity>
+              <Text
+                style={[
+                  styles.listItem,
+                  {
+                    textDecorationLine: item.completed
+                      ? "line-through"
+                      : "none",
+                    color: item.completed ? "gray" : "black",
+                  },
+                ]}>
+                {item.title}{" "}
+              </Text>
+            </View>
+          )}
+          style={styles.flatListContainer}
         />
       </View>
-      <View style={styles.todosFooter}>
-        <TextInput placeholder='Add Todo' />
-        <TouchableOpacity>Create!</TouchableOpacity>
-      </View>
+      <KeyboardAvoidingView style={styles.todosFooter} behavior='padding'>
+        <TextInput
+          value={todo}
+          onChangeText={todoHandler}
+          placeholder='Add Todo'
+          style={[styles.input, { borderColor: color }]}
+        />
+        <TouchableOpacity
+          style={[styles.addTodoBtn, { backgroundColor: color }]}
+          onPress={addTodo}>
+          <AntDesign name='plus' size={24} color='white' />
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
 
 export default function TodoList({ list }) {
-  const complete = list.todos.filter(({ completed }) => completed).length;
-  const unfinished = list.todos.length - complete;
-
+  const [complete, setComplete] = React.useState(
+    list.todos.filter(({ completed }) => completed).length
+  );
+  // finish complete state
   const [showModal, setShowModal] = React.useState(false);
 
+  const unfinished = list.todos.length - complete;
   function toggleModal() {
     setShowModal((state) => !state);
+  }
+  function updateCompleted() {
+    setComplete(list.todos.filter(({ completed }) => completed).length);
   }
 
   return (
     <View>
       <StyledModal show={showModal} toggle={toggleModal}>
-        <ShowTodos list={list} complete={complete}></ShowTodos>
+        <ShowTodos
+          list={list}
+          complete={complete}
+          updateCompleted={updateCompleted}></ShowTodos>
       </StyledModal>
       <TouchableOpacity
         style={[styles.listContainer, { backgroundColor: list.color }]}
@@ -90,15 +156,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   // modal
-  showTodosContainer: {
+  todosContainer: {
     flex: 1,
-    paddingTop: 16,
+    paddingVertical: 16,
   },
-  showTodosTitle: {
+  todosTitle: {
     fontSize: 26,
     fontWeight: "700",
   },
-  showTododsHeader: {
+  tododsHeader: {
     marginLeft: 45,
     borderBottomWidth: 5,
     paddingVertical: 12,
@@ -106,8 +172,28 @@ const styles = StyleSheet.create({
   todosFooter: {
     alignSelf: "stretch",
     flex: 0.5,
-    backgroundColor: "blue",
+    flexDirection: "row",
+    marginBottom: "20%",
     alignItems: "center",
     justifyContent: "center",
+    paddingHorizontal: 22,
+  },
+  input: {
+    flex: 1,
+    borderWidth: StyleSheet.hairlineWidth,
+    marginRight: 12,
+    padding: 22,
+    borderRadius: 5,
+  },
+  addTodoBtn: {
+    padding: 22,
+    borderRadius: 5,
+  },
+  flatListContainer: {
+    marginLeft: 35,
+    paddingVertical: 20,
+  },
+  listItem: {
+    fontSize: 20,
   },
 });
