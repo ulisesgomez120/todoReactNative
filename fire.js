@@ -9,9 +9,22 @@ const firebaseConfig = {
   messagingSenderId: process.env.REACT_APP_SENDER_ID,
   appId: process.env.REACT_APP_APP_ID,
 };
-if (Firebase.apps.length === 0) {
-  Firebase.initializeApp(firebaseConfig);
+function fire({ callback }) {
+  if (Firebase.apps.length === 0) {
+    Firebase.initializeApp(firebaseConfig);
+  }
+
+  Firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      callback(null, user);
+    } else {
+      Firebase.auth()
+        .signInAnonymously()
+        .catch((error) => {
+          callback(error);
+        });
+    }
+  });
 }
-function fire() {}
 
 export default fire;

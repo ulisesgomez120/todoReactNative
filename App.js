@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Alert,
   FlatList,
   StyleSheet,
   Text,
@@ -11,10 +12,17 @@ import TodoList from "./components/TodoList";
 import { tempData } from "./tempData";
 import StyledModal from "./components/StyledModal";
 import CreateList from "./components/CreateList";
+import fire from "./fire";
 
 export default function App() {
   const [showModal, setShowModal] = React.useState(false);
+  const [user, setUser] = React.useState(null);
 
+  function signInUser() {
+    fire((error, user) => {
+      if (error) return Alert("Something went wrong");
+    });
+  }
   function toggleModal() {
     setShowModal((state) => !state);
   }
@@ -23,6 +31,7 @@ export default function App() {
       <StyledModal show={showModal} toggle={toggleModal}>
         <CreateList toggle={toggleModal} />
       </StyledModal>
+      <Text>User: {user.id} </Text>
       <View style={{ flexDirection: "row" }}>
         <View style={styles.divider} />
         <Text style={styles.heading}>
