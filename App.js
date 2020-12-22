@@ -12,15 +12,23 @@ import TodoList from "./components/TodoList";
 import { tempData } from "./tempData";
 import StyledModal from "./components/StyledModal";
 import CreateList from "./components/CreateList";
-import fire from "./fire";
+import { fire } from "./fire";
 
 export default function App() {
   const [showModal, setShowModal] = React.useState(false);
-  const [user, setUser] = React.useState(null);
+  const [currentUser, setCurrentUser] = React.useState({});
 
+  React.useEffect(() => {
+    signInUser();
+  }, []);
   function signInUser() {
     fire((error, user) => {
-      if (error) return Alert("Something went wrong");
+      if (error) {
+        return Alert("Something went wrong");
+      } else {
+        console.log(user);
+        setCurrentUser(user);
+      }
     });
   }
   function toggleModal() {
@@ -31,7 +39,7 @@ export default function App() {
       <StyledModal show={showModal} toggle={toggleModal}>
         <CreateList toggle={toggleModal} />
       </StyledModal>
-      <Text>User: {user.id} </Text>
+      <Text>User: {currentUser?.uid} </Text>
       <View style={{ flexDirection: "row" }}>
         <View style={styles.divider} />
         <Text style={styles.heading}>

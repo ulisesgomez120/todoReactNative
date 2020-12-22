@@ -3,13 +3,14 @@ import "@firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIRE_KEY,
-  authDomain: "todo-test-app-ug.firebaseapp.com",
-  projectId: "todo-test-app-ug",
-  storageBucket: "todo-test-app-ug.appspot.com",
+  authDomain: process.env.REACT_APP_AUTH,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE,
   messagingSenderId: process.env.REACT_APP_SENDER_ID,
   appId: process.env.REACT_APP_APP_ID,
 };
-function fire({ callback }) {
+
+export function fire(callback) {
   if (Firebase.apps.length === 0) {
     Firebase.initializeApp(firebaseConfig);
   }
@@ -27,4 +28,4 @@ function fire({ callback }) {
   });
 }
 
-export default fire;
+export function getTodoLists() {}
